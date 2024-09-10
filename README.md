@@ -81,3 +81,14 @@ curl -X POST -H "Content-Type: application/json" -d '{"nickName": "johnDoe", "em
 ```
 curl -X GET http://localhost:8080/users
 ```
+
+
+## Uso de la API
+
+### Swagger
+
+- Esta disponible un [Swagger_UI](http://localhost:8081/swagger-ui/index.html#/) para poder visualizar los
+  recursos disponibles y probarlos
+- Adicionalemente en la carpeta de documentation ubicada en la raiz del proyecto se observara una carpeta de postman en
+  en donde tendre unas collections y environment que podemos [importar](https://learning.postman.com/docs/getting-started/importing-and-exporting/importing-data/)
+  y probar la Api **Importante Validar que los puertos en el environment corresponda a donde esta levantada la API**
