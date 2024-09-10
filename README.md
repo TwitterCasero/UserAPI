@@ -18,8 +18,8 @@ Antes de poder ejecutar `UserApi`, asegúrate de tener instalado lo siguiente:
 
 - JDK 17 o superior: [Descargar JDK](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
 - Maven 3.9.5 superior: [Descargar Maven](https://maven.apache.org/download.cgi)
-- MongoDB 7.0.14: [Instalación de MongoDB](https://docs.mongodb.com/manual/installation/)
-- Apache Kafka 3.8.0: [Instalación de Kafka](https://kafka.apache.org/documentation/#quickstart)
+- MongoDB 7.0.14: [Instalación de MongoDB](https://www.mongodb.com/try/download/community)
+- Apache Kafka 3.8.0: [Instalación de Kafka](https://kafka.apache.org/downloads) - Binary downloads: Scala 2.12
 
 ## Configuración
 
@@ -35,13 +35,20 @@ spring.kafka.bootstrap-servers=localhost:9092
 ### Iniciar MongoDB
 
 ```
-mongod --dbpath /ruta/a/tu/directorio/db
+Abrir MongoDB compass
+![img.png](img.png)
+add new conetion 
+![img_1.png](img_1.png)
+Connect
 
 ```
 
 ### Iniciar Apache Kafka
 
 ```
+**Importante para window dejar la carpeta a una altura cerca de C:**
+**Ejemplo C:\Kafka o E:\kafka**
+**Desde la raiz de la carpeta kafka ejecutamos**
 
 ---Windows---
 
@@ -65,6 +72,10 @@ bin/kafka-server-start.sh config/server.properties
 ```
 mvn clean install
 mvn spring-boot:run
+
+o desde intellij
+
+![img_3.png](img_3.png)
 
 ```
 
