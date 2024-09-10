@@ -36,9 +36,7 @@ spring.kafka.bootstrap-servers=localhost:9092
 
 ```
 Abrir MongoDB compass
-![img.png](img.png)
 add new conetion 
-![img_1.png](img_1.png)
 Connect
 
 ```
@@ -74,8 +72,7 @@ mvn clean install
 mvn spring-boot:run
 
 o desde intellij
-
-![img_3.png](img_3.png)
+Run 'UserApplication'
 
 ```
 
