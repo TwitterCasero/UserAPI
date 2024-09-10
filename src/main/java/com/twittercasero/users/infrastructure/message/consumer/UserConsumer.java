@@ -1,5 +1,7 @@
 package com.twittercasero.users.infrastructure.message.consumer;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.twittercasero.users.application.dto.FollowerActionDTO;
 import com.twittercasero.users.application.useCases.AddFollowersUseCase;
 import com.twittercasero.users.application.useCases.BlockFollowingUseCase;
@@ -20,21 +22,44 @@ public class UserConsumer {
     @Autowired
     BlockFollowingUseCase blockFollowingUseCase;
 
-    @KafkaListener(topics = "add-followers-topic", groupId = "my-user-consumer-group")
-    public void receiveMessageToAddFollowers(FollowerActionDTO message) {
+    ObjectMapper mapper = new ObjectMapper();
 
-        addFollowersUseCase.accept(message.getUserNickName(), message.getTargetNickName());
+    @KafkaListener(topics = "add-followers-topic", groupId = "my-user-consumer-group")
+    public void receiveMessageToAddFollowers(String message) {
+
+        try {
+            FollowerActionDTO followerAction = mapper.readValue(message, FollowerActionDTO.class);
+            addFollowersUseCase.accept(followerAction.getUserNickName(), followerAction.getTargetNickName());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 
     @KafkaListener(topics = "delete-followers-topic", groupId = "my-user-consumer-group")
-    public void receiveMessageToDeleteFollowers(FollowerActionDTO message) {
+    public void receiveMessageToDeleteFollowers(String message) {
 
-        deleteFollowersUseCase.accept(message.getUserNickName(), message.getTargetNickName());
+        try {
+            FollowerActionDTO followerAction = mapper.readValue(message, FollowerActionDTO.class);
+            deleteFollowersUseCase.accept(followerAction.getUserNickName(), followerAction.getTargetNickName());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 
     @KafkaListener(topics = "block-following-topic", groupId = "my-user-consumer-group")
-    public void receiveMessageToBlockFollowing(FollowerActionDTO message) {
+    public void receiveMessageToBlockFollowing(String message) {
 
-        blockFollowingUseCase.accept(message.getUserNickName(), message.getTargetNickName());
+        try {
+            FollowerActionDTO followerAction = mapper.readValue(message, FollowerActionDTO.class);
+            blockFollowingUseCase.accept(followerAction.getUserNickName(), followerAction.getTargetNickName());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 }

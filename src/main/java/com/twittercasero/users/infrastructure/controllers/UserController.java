@@ -6,6 +6,7 @@ import com.twittercasero.users.application.useCases.GetFollowersByNickNameUseCas
 import com.twittercasero.users.application.useCases.GetFollowingByNickNameUseCase;
 import com.twittercasero.users.application.useCases.GetUserByNickNameUseCase;
 import com.twittercasero.users.domain.entities.User;
+import com.twittercasero.users.infrastructure.entities.UserCreateRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,8 +40,15 @@ public class UserController {
     private GetFollowingByNickNameUseCase getFollowingByNickNameUseCase;
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody @Valid User user) {
-        User savedUser = createUserUseCase.apply(user);
+    public ResponseEntity<User> createUser(@RequestBody @Valid UserCreateRequest user) {
+
+        User savedUser = createUserUseCase.apply(User.builder()
+                .nickName(user.getNickName())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .build());
+
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 

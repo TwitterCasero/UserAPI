@@ -1,70 +1,64 @@
 package com.twittercasero.users.infrastructure.message.consumer;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.twittercasero.users.application.dto.FollowerActionDTO;
 import com.twittercasero.users.application.useCases.AddFollowersUseCase;
 import com.twittercasero.users.application.useCases.BlockFollowingUseCase;
 import com.twittercasero.users.application.useCases.DeleteFollowersUseCase;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class UserConsumerTest {
+class UserConsumerTest {
 
     @Mock
     private AddFollowersUseCase addFollowersUseCase;
-
     @Mock
     private DeleteFollowersUseCase deleteFollowersUseCase;
-
     @Mock
     private BlockFollowingUseCase blockFollowingUseCase;
 
     @InjectMocks
     private UserConsumer userConsumer;
 
-    @Test
-    public void testReceiveMessageToAddFollowers() {
+    private ObjectMapper mapper = new ObjectMapper();
+    private final String sampleMessage = "{\"userNickName\":\"user1\",\"targetNickName\":\"user2\"}";
 
-        FollowerActionDTO message = FollowerActionDTO.builder()
-                .userNickName("userNickName")
-                .targetNickName("targetNickName").build();
-        doNothing().when(addFollowersUseCase).accept(message.getUserNickName(), message.getTargetNickName());
-
-        userConsumer.receiveMessageToAddFollowers(message);
-
-        verify(addFollowersUseCase, times(1)).accept(message.getUserNickName(), message.getTargetNickName());
+    @BeforeEach
+    void setUp() {
+        // Puedes configurar comportamientos adicionales aquí si es necesario
     }
 
     @Test
-    public void testReceiveMessageToDeleteFollowers() {
+    void testReceiveMessageToAddFollowers() throws Exception {
+        FollowerActionDTO dto = mapper.readValue(sampleMessage, FollowerActionDTO.class);
 
-        FollowerActionDTO message = FollowerActionDTO.builder()
-                .userNickName("userNickName")
-                .targetNickName("targetNickName").build();
-        doNothing().when(deleteFollowersUseCase).accept(message.getUserNickName(), message.getTargetNickName());
+        userConsumer.receiveMessageToAddFollowers(sampleMessage);
 
-        userConsumer.receiveMessageToDeleteFollowers(message);
-
-        verify(deleteFollowersUseCase, times(1)).accept(message.getUserNickName(), message.getTargetNickName());
+        verify(addFollowersUseCase).accept(dto.getUserNickName(), dto.getTargetNickName());
     }
 
     @Test
-    public void testReceiveMessageToBlockFollowing() {
+    void testReceiveMessageToDeleteFollowers() throws Exception {
+        FollowerActionDTO dto = mapper.readValue(sampleMessage, FollowerActionDTO.class);
 
-        FollowerActionDTO message = FollowerActionDTO.builder()
-                .userNickName("userNickName")
-                .targetNickName("targetNickName").build();
-        doNothing().when(blockFollowingUseCase).accept(message.getUserNickName(), message.getTargetNickName());
+        userConsumer.receiveMessageToDeleteFollowers(sampleMessage);
 
-        userConsumer.receiveMessageToBlockFollowing(message);
+        verify(deleteFollowersUseCase).accept(dto.getUserNickName(), dto.getTargetNickName());
+    }
 
-        verify(blockFollowingUseCase, times(1)).accept(message.getUserNickName(), message.getTargetNickName());
+    @Test
+    void testReceiveMessageToBlockFollowing() throws Exception {
+        FollowerActionDTO dto = mapper.readValue(sampleMessage, FollowerActionDTO.class);
+
+        userConsumer.receiveMessageToBlockFollowing(sampleMessage);
+
+        verify(blockFollowingUseCase).accept(dto.getUserNickName(), dto.getTargetNickName());
     }
 }
